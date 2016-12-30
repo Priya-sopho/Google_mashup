@@ -74,7 +74,27 @@ $(function() {
  */
 function addMarker(place)
 {
-    // TODO
+    //store place's latitude and longitude
+    var Latlng =new google.maps.LatLng(parseFloat(place.latitude),(parseFloat(place.longitude));
+    
+    
+    //creating labelled marker
+    var marker = new MarkerWithLabel( {
+        position = Latlng,
+        map : map,
+        labelContent : place.place_name + ", " + place.admin_code1,
+        labelAnchor : new google.maps.Point (50, 0),
+        labelClass : "label",
+        labelStyle : { opacity: 0.75 }
+        
+       });
+    
+    //laod articles in info window
+    google.maps.event.addListener(marker, "click", function() { loadInfoWindow(place, marker) });
+    
+    //add marker to global markers array 
+    markers.push(marker);
+            
 }
 
 /**
