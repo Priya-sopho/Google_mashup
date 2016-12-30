@@ -59,7 +59,7 @@ $(function() {
     };
 
     // get DOM node in which map will be instantiated
-    var canvas = $("#map-canvas").get(0);
+    var canvas = $("#map_canvas").get(0);
 
     // instantiate map
     map = new google.maps.Map(canvas, options);
@@ -179,7 +179,17 @@ function hideInfo()
  */
 function removeMarkers()
 {
-    // TODO
+   // iterate through global marker array
+   var len = markers.length ;
+   for( var i=0; i< len ; ++i)
+   {
+   
+       //remove markers from map
+       markers[i].setMap(null) ;
+   }
+   
+   //empty array
+   markers.length = 0;        
 }
 
 /**
