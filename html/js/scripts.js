@@ -54,7 +54,7 @@ $(function() {
         maxZoom: 14,
         panControl: true,
         styles: styles,
-        zoom: 13,
+        zoom: 12,
         zoomControl: true
     };
 
@@ -90,8 +90,8 @@ function addMarker(place)
         labelClass : "label",
         labelStyle : { opacity: 0.75 },
         icon : icon,
-        animation: google.maps.Animation.DROP,
-        title: 'News'
+        animation: google.maps.Animation.BOUNCE,      //personal touch
+        title: place.place_name + ' News'                 //personal touch
         
        });
     
