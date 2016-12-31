@@ -59,7 +59,7 @@ $(function() {
     };
 
     // get DOM node in which map will be instantiated
-    var canvas = $("#map_canvas").get(0);
+    var canvas = $("#map-canvas").get(0);
 
     // instantiate map
     map = new google.maps.Map(canvas, options);
