@@ -113,7 +113,7 @@ function ulInfoWindow(data)
      var ul = "<ul>";
      
      //create template using underscore library
-     var template = _.template("<li><a href ='<%- link %>' target='_blank'><%- title %></a></li>);
+     var template = _.template("<li><a href ='<%- link %>' target='_blank'><%- title %></a></li>");
      
      //insert link and link title
      var len_data= data.length;
