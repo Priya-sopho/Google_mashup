@@ -64,6 +64,7 @@ $(function() {
     // instantiate map
     map = new google.maps.Map(canvas, options);
 
+    
     // configure UI once Google Map is idle (i.e., loaded)
     google.maps.event.addListenerOnce(map, "idle", configure);
 
@@ -75,17 +76,22 @@ $(function() {
 function addMarker(place)
 {
     //store place's latitude and longitude
-    var Latlng =new google.maps.LatLng(parseFloat(place.latitude),(parseFloat(place.longitude));
+    var Latlng = new google.maps.LatLng(parseFloat(place.latitude),parseFloat(place.longitude));
     
+    //News paper icon
+    var icon = { url : "../news_icon.png" };
     
     //creating labelled marker
     var marker = new MarkerWithLabel( {
-        position = Latlng,
+        position : Latlng,
         map : map,
         labelContent : place.place_name + ", " + place.admin_code1,
         labelAnchor : new google.maps.Point (50, 0),
         labelClass : "label",
-        labelStyle : { opacity: 0.75 }
+        labelStyle : { opacity: 0.75 },
+        icon : icon,
+        animation: google.maps.Animation.DROP,
+        title: 'News'
         
        });
     
@@ -97,6 +103,83 @@ function addMarker(place)
             
 }
 
+/**
+* Create info windom for unordered list content
+*/
+function ulInfoWindow(data)
+{
+     //begin unordered list
+     
+     var ul = "<ul>";
+     
+     //create template using underscore library
+     var template = _.template("<li><a href ='<%- link %>' target='_blank'><%- title %></a></li>);
+     
+     //insert link and link title
+     var len_data= data.length;
+     for(var i=0; i<len_data; ++i)
+     {
+        ul+=template({
+           link :data[i].link,
+           title : data[i].title
+           });
+      }
+      
+      //end unorderd list
+     ul += "</ul>" ;
+     
+     return ul;
+  } 
+  
+  
+/***
+* Load info window html content
+*/
+function loadInfoWindow(place, marker)
+{
+    showInfo(marker);
+    
+    $.getJSON("articles.php", "geo=" + place.postal_code)
+    .done(function(data, textStatus, jqXHR)
+    {
+        // if no news in postal code area, call getJSON on place name instead
+        if(data.length === 0)
+         {
+             $.getJSON("articles.php", "geo=" + place.place_name)
+             .done(function(data, textStatus, jqXHR)
+             {
+                //if no news in place name area
+                if(data.length === 0)
+                {
+                   showInfo(marker, "No news for this area. ");
+                 }
+                //else if news exist display in Infowindow
+                else
+                {
+                    
+                    //dynamically create list of articles
+                    ul = ulInfoWindow(data);
+                 
+                   //show news
+                   showInfo(marker,ul);
+                }
+            });
+       }
+       
+       //else if news exist in postal code area, render news in info window
+        else
+                {
+                    
+                    //dynamically create list of articles
+                    ul = ulInfoWindow(data);
+                 
+                   //show news
+                   showInfo(marker,ul);
+                }
+            }); 
+      }
+      
+                                        
 /**
  * Configures application.
  */
